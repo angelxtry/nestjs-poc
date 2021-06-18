@@ -4,16 +4,18 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { TaskStatus } from './task-status.enum';
 import { UnprocessableEntityException } from '@nestjs/common';
 import { FilterDto } from './dto/filter.dto';
+import { User } from '../auth/user.entity';
 
 @EntityRepository(Task)
 export class TaskRepository extends Repository<Task> {
-  async createTask(createTaskDto: CreateTaskDto): Promise<void> {
+  async createTask(createTaskDto: CreateTaskDto, user: User): Promise<void> {
     const { title, description } = createTaskDto;
     try {
       const task = await this.create({
         title,
         description,
         status: TaskStatus.OPEN,
+        user,
       });
       await this.save(task);
     } catch {
