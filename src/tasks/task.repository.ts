@@ -23,9 +23,10 @@ export class TaskRepository extends Repository<Task> {
     }
   }
 
-  async getTasks(filterDto: FilterDto): Promise<Task[]> {
+  async getTasks(filterDto: FilterDto, user: User): Promise<Task[]> {
     const { status, search } = filterDto;
     const query = this.createQueryBuilder('task');
+    query.where({ user });
     if (status) query.andWhere('task.status = :status', { status });
     if (search)
       query.andWhere(
