@@ -30,7 +30,7 @@ export class TaskRepository extends Repository<Task> {
     if (status) query.andWhere('task.status = :status', { status });
     if (search)
       query.andWhere(
-        'task.title LIKE :search OR task.description LIKE :search',
+        '(task.title LIKE :search OR task.description LIKE :search)',
         { search: `%${search}%` },
       );
     return query.getMany();
